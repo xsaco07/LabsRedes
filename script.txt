@@ -1,0 +1,34 @@
+R1-----------
+ena
+config t
+interface s0/0/0
+no ip address
+encapsulation frame relay
+no shut
+interface s0/0/0.100
+ip address 200.10.20.5 255.255.255.252
+frame-relay interface-dlci 100
+router ospf 100
+network 128.10.10.4 0.0.0.3 area 0
+network 200.10.20.4 0.0.0.3 area 0
+
+R2------------
+ena
+config t
+interface s0/0/0
+no ip address
+encapsulation frame relay
+no shut
+interface s0/0/0.100
+ip address 200.10.20.6 255.255.255.252
+frame-relay interface-dlci 100
+interface s0/0/0.200
+ip address 200.10.20.1 255.255.255.252
+frame-relay interface-dlci 200
+!
+router ospf 100
+network 200.10.20.0 0.0.0.3 area 0
+network 200.10.20.4 0.0.0.3 area 0
+
+
+
