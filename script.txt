@@ -42,6 +42,17 @@ frame-relay interface-dlci 200
 interface s0/0/0.16 point-to-point
 ip address 172.168.10.5 255.255.255.252
 frame-relay interface-dlci 16
+router ospf 100
+network 172.168.10.4 0.0.0.3 area 0
+network 200.10.20.0 0.0.0.3 area 0
+
+RIZQ------------------
+ip route 0.0.0.0 0.0.0.0 s0/0/0
+R1--------------------
+ip route 1.0.0.0 255.0.0.0 s0/0/1
+router ospf 100
+redistribute static subnets
+
 
 
 
