@@ -1,0 +1,95 @@
+==== PONER RIP ==== 
+R2 -------------------
+ena
+conf t
+router rip 
+version 2
+no auto-summary
+network 128.10.10.4
+network 200.10.20.4
+redistribute static
+
+R3 -------------------
+ena
+conf t
+router rip 
+version 2
+no auto-summary
+network 200.10.20.4
+network 200.10.20.0
+network 11.0.0.0
+
+R4 -------------------
+ena
+conf t
+router rip 
+version 2
+no auto-summary
+network 200.10.20.0
+network 13.0.0.0
+
+
+==== PONER OSPF ==== 
+
+R4 -------------------
+ena
+conf t
+
+int s0/0/1
+encapsulation frame-relay
+no ip address
+int s0/0/1.16 point-to-point
+ip address 172.168.10.6 255.255.255.252
+frame-relay interface-dlci 16
+
+router ospf 200
+network 172.168.10.4 0.0.0.3 area 0
+
+
+R5 -------------------
+ena
+conf t
+
+
+int s0/0/0
+encapsulation frame-relay
+no ip address
+int s0/0/0.16 point-to-point
+ip address 172.168.10.5 255.255.255.252
+frame-relay interface-dlci 16
+int s0/0/0.17 point-to-point
+ip address 172.168.10.1 255.255.255.252
+frame-relay interface-dlci 17
+
+
+router ospf 200
+network 172.168.10.4 0.0.0.3 area 0
+network 172.168.10.0 0.0.0.3 area 0
+network 12.0.0.0 0.255.255.255 area 0
+
+
+
+R6 -------------------
+ena
+conf t
+
+int s0/0/0
+encapsulation frame-relay
+no ip address
+int s0/0/0.17 point-to-point
+ip address 172.168.10.2 255.255.255.252
+frame-relay interface-dlci 17
+
+router ospf 200
+network 172.168.10.0 0.0.0.3 area 0
+network 192.168.10.4 0.0.0.3 area 0
+redistribute static subnets
+
+
+==== CONECTAR PROTOCOLOS ==== 
+
+R4 -------------------
+router rip 
+redistribute ospf 200 metric 3
+router ospf 200
+redistribute rip metric 64 subnets
