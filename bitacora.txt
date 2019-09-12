@@ -1,0 +1,62 @@
+=== Poner IP, gateway y DNS al la laptop
+
+=== Poner IP, gateway y DNS al server
+
+
+=== R 1.1.1.1
+ena
+conf t
+
+int loopback 0
+ip add 1.1.1.1 255.255.255.255
+
+int fa0/0
+ip add 4.0.0.1 255.0.0.0
+no sh
+
+int s0/0/0
+ip add 5.0.0.1 255.0.0.0
+no sh
+
+router ospf 10
+net 4.0.0.0 0.255.255.255 area 0
+net 5.0.0.0 0.255.255.255 area 1
+	
+
+=== R 2.2.2.2
+ena
+conf t
+
+int loopback 0
+ip add 2.2.2.2 255.255.255.255
+
+int s0/0/0
+ip add 5.0.0.2 255.0.0.0
+no sh
+
+int s0/0/1
+ip add 6.0.0.1 255.0.0.0
+no sh
+
+router ospf 10
+net 6.0.0.0 0.255.255.255 area 1
+net 5.0.0.0 0.255.255.255 area 1
+
+=== R 3.3.3.3
+ena
+conf t
+
+int loopback 0
+ip add 3.3.3.3 255.255.255.255
+
+int fa0/0
+ip add 10.0.0.1 255.0.0.0
+no sh
+
+int s0/0/0
+ip add 6.0.0.2 255.0.0.0
+no sh
+
+router ospf 10
+net 10.0.0.0 0.255.255.255 area 2
+net 6.0.0.0 0.255.255.255 area 1
