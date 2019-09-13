@@ -68,3 +68,41 @@ frame-relay interface-dlci 100
 
 === Configurar Nube 2 
 
+
+
+
+
+====== 20190912 18:15
+=== R1
+Router>ena
+Router#conf t
+Router(config)#router ospf 100
+Router(config-router)#network 1.0.0.0 0.255.255.255 area 0
+Router(config-router)#network 200.10.20.0 0.0.0.255 area 0
+
+=== R2
+Router>ena
+Router#conf t
+Router(config)#router eigrp 100
+Router(config-router)#network 2.0.0.0
+Router(config-router)#network 172.168.10.4 0.0.0.3
+Router(config-router)#no auto-summary 
+Router(config-router)#redistribute ospf 100 metric 1544 200 255 1 1500
+
+Router(config)#router ospf 100
+Router(config-router)#network 200.10.20.0 0.0.0.255 area 0
+Router(config-router)#redistribute eigrp 100 metric 64 subnets 
+
+===R3
+Router>ena
+Router#conf t
+Router(config)#router eigrp 100
+Router(config-router)#no auto-summary 
+Router(config-router)#network 3.0.0.0
+Router(config-router)#network 172.168.10.4 0.0.0.3
+
+
+
+
+
+
