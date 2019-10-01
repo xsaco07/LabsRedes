@@ -1,0 +1,7 @@
+===== Asignar IP's a todas las terminales (laptops y servidores)
+
+# Configurar area OSPF 10
+===== R1 
+ena
+conf t 
+int s
