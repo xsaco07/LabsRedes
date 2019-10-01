@@ -1,7 +1,42 @@
 ===== Asignar IP's a todas las terminales (laptops y servidores)
 
-# Configurar area OSPF 10
+
 ===== R1 
 ena
 conf t 
-int s
+
+int s0/1/0
+ip add 200.10.20.13 255.255.255.252
+no sh 
+
+int s0/1/1
+ip add 200.10.20.17 255.255.255.252
+no sh 
+
+int fa0/0 
+ip add 172.168.10.5 255.255.255.252
+no sh 
+
+router ospf 10 
+network 172.168.10.4 255.255.255.252 area 0
+network 200.10.20.16 255.255.255.252 area 0
+network 200.10.20.12 255.255.255.252 area 0
+
+
+===== R2
+ena
+conf t 
+
+int s0/1/0
+ip add 200.10.20.18 255.255.255.252
+no sh 
+
+int fa0/0 
+ip add 173.168.10.5 255.255.255.252
+no sh 
+
+router ospf 10 
+network 173.168.10.4 255.255.255.252 area 0
+network 200.10.20.16 255.255.255.252 area 0
+
+
