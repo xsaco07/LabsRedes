@@ -1,4 +1,4 @@
-===== Asignar IP's a todas las terminales (laptops y servidores)
+===== Asignar IP's y gateways a todas las terminales (laptops y servidores)
 
 
 ===== R1 
@@ -40,3 +40,84 @@ network 173.168.10.4 255.255.255.252 area 0
 network 200.10.20.16 255.255.255.252 area 0
 
 
+===== Heredia 
+ena 
+conf t 
+
+int fa0/0
+ip add 192.168.10.1 255.255.255.192 
+no sh 
+
+int s0/1/0
+ip add 200.10.20.1 255.255.255.252
+no sh
+
+ip route 0.0.0.0 0.0.0.0 s0/1/0
+
+
+====== Cartago
+ena 
+conf t 
+
+int fa0/0
+ip add 192.168.10.65 255.255.255.224
+no sh 
+
+int s0/1/0
+ip add 200.10.20.5 255.255.255.252
+no sh
+
+ip route 0.0.0.0 0.0.0.0 s0/1/0
+
+
+====== Limon
+
+ena 
+conf t 
+
+int fa0/0
+ip add 192.168.10.97 255.255.255.224
+no sh 
+
+int s0/1/0
+ip add 200.10.20.9 255.255.255.252
+no sh
+
+ip route 0.0.0.0 0.0.0.0 s0/1/0
+
+
+====== San Jose
+ena 
+conf t
+
+int s0/1/0
+ip add 200.10.20.2 255.255.255.252
+no sh
+
+int s0/1/1
+ip add 200.10.20.6 255.255.255.252
+no sh
+
+
+int s0/0/0
+ip add 200.10.20.10 255.255.255.252
+no sh
+
+int s0/0/1
+ip add 200.10.20.14 255.255.255.252
+no sh
+
+ip route 192.168.10.0 255.255.255.192 s0/1/0
+ip route 192.168.10.64 255.255.255.224 s0/1/1
+ip route 192.168.10.96 255.255.255.224 s0/0/0
+ip route 0.0.0.0 0.0.0.0 s0/0/1
+
+
+====== R1
+
+ip route 0.0.0.0 0.0.0.0 s0/1/0
+
+
+====== R2
+
+ip route 0.0.0.0 0.0.0.0 s0/1/0
