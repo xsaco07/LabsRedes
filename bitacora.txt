@@ -1,148 +1,28 @@
-=== Asignar IP y mascara a PC0
+=== Se realiza diseño y etiquetado
+=== Se configura server DNS/web.com 
 
-=== Asignar IP y mascara a PC1
-
-=== Asignar IP y mascara a DNS
-
-
-=== R1 
-ena 
-conf t
-
-int fa0/0
-ip address 1.0.0.1 255.0.0.0
-no sh
-
-int s0/0/0
-encapsulation frame-relay
-no sh
-
-int s0/0/0.16 point-to-point
-ip add 200.10.20.2 255.255.255.0
-frame-relay interface-dlci 16
-
-
-=== R2 
-ena 
-conf t
-
-int fa0/0
-ip address 2.0.0.1 255.0.0.0
-no sh
-
-int s0/0/0
-encapsulation frame-relay
-no sh
-
-int s0/0/0.16 point-to-point
-ip add 200.10.20.1 255.255.255.0
-frame-relay interface-dlci 16
-
-
-int s0/0/1
-encapsulation frame-relay 
-no sh
-
-int s0/0/1.100 point-to-point
-ip add 172.168.10.5 255.255.255.252
-frame-relay interface-dlci 100
-
-
-=== R3
-ena 
-conf t
-
-int fa0/0
-ip add 3.0.0.1 255.0.0.0
-no sh
-
-int s0/0/0
-encapsulation frame-relay
-no sh
-
-int s0/0/0.100 point-to-point
-ip add 172.168.10.6 255.255.255.252
-frame-relay interface-dlci 100
-
-=== Configurar Nube 1 
-
-=== Configurar Nube 2 
-
-
-
-
-
-====== 20190912 18:15
-=== R1
+=== Router1 
 Router>ena
 Router#conf t
-Router(config)#router ospf 100
+Router(config)#interface fastEthernet 0/0
+Router(config-if)#ip address 1.0.0.1 255.0.0.0
+Router(config-if)#no shutdown 
+
+Router(config)#interface serial 0/0/0
+Router(config-if)#ip address 172.168.0.2 255.255.255.252
+Router(config-if)#no sh
+
+
+=== RStick 
+Router>ena
+Router#conf t
+Router(config)#hostname RStick
+RStick(config)#int serial 0/0/0
+RStick(config-if)#ip address 172.168.0.1 255.255.255.252
+RStick(config-if)#no shutdown 
+
+
+=== Router1 
+Router(config)#router ospf 10
 Router(config-router)#network 1.0.0.0 0.255.255.255 area 0
-Router(config-router)#network 200.10.20.0 0.0.0.255 area 0
-
-=== R2
-Router>ena
-Router#conf t
-Router(config)#router eigrp 100
-Router(config-router)#network 2.0.0.0
-Router(config-router)#network 172.168.10.4 0.0.0.3
-Router(config-router)#no auto-summary 
-Router(config-router)#redistribute ospf 100 metric 1544 200 255 1 1500
-
-Router(config)#router ospf 100
-Router(config-router)#network 200.10.20.0 0.0.0.255 area 0
-Router(config-router)#redistribute eigrp 100 metric 64 subnets 
-
-===R3
-Router>ena
-Router#conf t
-Router(config)#router eigrp 100
-Router(config-router)#no auto-summary 
-Router(config-router)#network 3.0.0.0
-Router(config-router)#network 172.168.10.4 0.0.0.3
-
-16/09
-
-=== R1 
-
-ena
-config t
-
-interface fa0/0
-ip nat inside
-
-exit
-
-interface s0/0/0.16
-ip nat outside
-
-exit
-
-access-list 1 permit 1.0.0.0 0.255.255.255
-ip nat pool labpool 200.10.20.10 200.10.20.30 netmask 255.255.255.0
-ip nat inside source list 1 pool labpool
-
-=== R3
-
-ena
-config t
-
-interface fa0/0
-ip nat inside
-
-exit
-
-interface s0/0/0.100
-ip nat outside
-
-exit
-
-access-list 1 permit 3.0.0.0 0.255.255.255
-
-ip nat inside source list 1 interface s0/0/0.100 overload
-
-
-
-
-
-
+Router(config-router)#network 172.168.0.0 0.0.0.3 area 0
