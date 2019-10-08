@@ -5,7 +5,7 @@
 Router>ena
 Router#conf t
 Router(config)#interface fastEthernet 0/0
-Router(config-if)#ip address 1.0.0.1 255.0.0.0
+Router(config-if)#ip address 196.168.10.1 255.255.255.0
 Router(config-if)#no shutdown 
 
 Router(config)#interface serial 0/0/0
@@ -24,5 +24,5 @@ RStick(config-if)#no shutdown
 
 === Router1 
 Router(config)#router ospf 10
-Router(config-router)#network 1.0.0.0 0.255.255.255 area 0
+Router(config-router)#network 196.168.10.0 0.0.0.255 area 0
 Router(config-router)#network 172.168.0.0 0.0.0.3 area 0
