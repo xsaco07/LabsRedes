@@ -69,7 +69,7 @@ Switch(config-if)#switchport mode trunk
 === RStick 
 RStick>ena
 RStick#conf t
-RStick(config-if)#interface fastEthernet 0/0
+RStick(config)#interface fastEthernet 0/0
 RStick(config-if)#no sh
 RStick(config-if)#interface fastEthernet 0/0.10
 RStick(config-subif)#encapsulation dot1Q 10
@@ -98,6 +98,87 @@ RStick(config)#router ospf 10
 RStick(config-router)#network 172.168.10.0 0.0.0.255 area 0
 RStick(config-router)#network 172.168.20.0 0.0.0.255 area 0
 RStick(config-router)#network 172.168.0.0 0.0.0.3 area 0
+
+
+
+
+
+=== SW4
+Switch>ena 
+Switch#conf t
+Switch(config)#interface range fastEthernet 0/1-5
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/6-11
+Switch(config-if-range)#switchport access vlan 40
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/20-22
+Switch(config-if-range)#switchport trunk allowed vlan 30,40
+Switch(config-if-range)#switchport mode trunk
+
+
+
+=== SW3
+Switch>ENA
+Switch#conf t
+Switch(config)#interface range fastEthernet 0/1-5
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/6-11
+Switch(config-if-range)#switchport access vlan 40
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/20-22
+Switch(config-if-range)#switchport trunk allowed vlan 30,40
+Switch(config-if-range)#switchport mode trunk
+Switch(config-if-range)#
+
+Switch(config)#interface fastEthernet 0/24
+Switch(config-if)#switchport trunk allowed vlan 30,40
+Switch(config-if)#switchport mode trunk
+
+
+
+
+
+
+
+
+=== RStick 
+RStick>ena
+RStick#conf t
+RStick(config)#interface fastEthernet 0/1
+RStick(config-if)#no sh
+
+RStick(config-if)#interface fastEthernet 0/1.30
+RStick(config-subif)#encapsulation dot1Q 30
+RStick(config-subif)#ip address 192.168.10.1 255.255.255.0
+
+RStick(config-subif)#interface fastEthernet 0/1.40
+RStick(config-subif)#encapsulation dot1Q 40
+RStick(config-subif)#ip address 192.168.20.1 255.255.255.0
+RStick(config-subif)#exit
+
+RStick(config)#ip dhcp excluded-address 192.168.10.1
+RStick(config)#ip dhcp excluded-address 192.168.20.1
+
+RStick(config)#ip dhcp pool vlan30
+RStick(dhcp-config)#network 192.168.10.0 255.255.255.0
+RStick(dhcp-config)#default-router 192.168.10.1
+RStick(dhcp-config)#dns-server 196.168.10.2
+
+RStick(dhcp-config)#ip dhcp pool vlan40
+RStick(dhcp-config)#dns-server 196.168.10.2
+RStick(dhcp-config)#default-router 192.168.20.1
+RStick(dhcp-config)#network 192.168.20.0 255.255.255.0
+RStick(dhcp-config)#exit
+
+RStick(config)#router ospf 10
+RStick(config-router)#network 192.168.10.0 0.0.0.255 area 0
+RStick(config-router)#network 192.168.20.0 0.0.0.255 area 0
 
 
 
