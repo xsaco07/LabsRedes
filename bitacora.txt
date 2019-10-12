@@ -1,0 +1,7 @@
+=== BITACORA PROYECTO REDES 
+// Formato: 
+// ==== Tarea | Nombre 
+
+
+==== Colocar hardware | Emmanuel
+
