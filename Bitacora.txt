@@ -1,0 +1,112 @@
+
+=== ISP
+>ena
+#conf t
+#hostname ISP
+ISP(config)#interface fastEthernet 0/0
+ISP(config-if)#ip address 196.168.10.5 255.255.255.252
+ISP(config-if)#no sh
+ISP(config-if)#ex
+ISP(config)#interface serial 0/0/0
+ISP(config-if)#ip address 200.10.20.5 255.255.255.252
+ISP(config-if)#no sh
+
+
+=== ROUTER
+Router>ena
+Router#conf t
+Router(config)#interface serial 0/0/0
+Router(config-if)#ip address 200.10.20.6 255.255.255.252
+Router(config-if)#no sh
+
+
+
+
+=== TRUNK
+Switch(config)#interface range fastEthernet 0/20-23
+Switch(config-if-range)#switchport trunk allowed vlan 10,20,30
+Switch(config-if-range)#switchport mode trunk
+
+Switch(config-if-range)#interface fastEthernet 0/24
+Switch(config-if)#switchport trunk allowed vlan 10,20,30
+Switch(config-if)#switchport mode trunk
+
+
+=== SW1
+witch>ena
+Switch#conf t
+Switch(config)#interface range fastEthernet 0/1-7
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/8-15
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/16-22
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/23-24
+Switch(config-if-range)#switchport trunk allowed vlan 10,20,30
+Switch(config-if-range)#switchport mode trunk
+
+
+=== SW2
+witch>ena
+Switch#conf t
+Switch(config)#interface range fastEthernet 0/1-7
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/8-15
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/16-22
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/23-24
+Switch(config-if-range)#switchport trunk allowed vlan 10,20,30
+Switch(config-if-range)#switchport mode trunk
+
+=== ROUTER
+Router(config)# interface fastEthernet 0/0
+Router(config-if)#no sh
+
+Router(config)#interface fastEthernet 0/0.10
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip address 172.168.10.1 255.255.255.0
+
+Router(config-subif)#interface fastEthernet 0/0.20
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip address 172.168.20.1 255.255.255.0
+
+Router(config-subif)#interface fastEthernet 0/0.30
+Router(config-subif)#encapsulation dot1Q 30
+Router(config-subif)#ip address 172.168.30.1 255.255.255.0
+
+Router(config-subif)#ex
+Router(config)#ip dhcp excluded-address 172.168.10.1
+Router(config)#ip dhcp excluded-address 172.168.10.2
+Router(config)#ip dhcp excluded-address 172.168.20.1
+Router(config)#ip dhcp excluded-address 172.168.20.2
+Router(config)#ip dhcp excluded-address 172.168.30.1
+Router(config)#ip dhcp excluded-address 172.168.30.2
+
+Router(config)#ip dhcp pool desarrollosv10
+Router(dhcp-config)#network 172.168.10.0 255.255.255.0
+Router(dhcp-config)#default-router 172.168.10.1
+Router(dhcp-config)#dns-server 172.168.10.2
+
+Router(dhcp-config)#ip dhcp pool personal20
+Router(dhcp-config)#network 172.168.20.0 255.255.255.0
+Router(dhcp-config)#default-router 172.168.20.1
+Router(dhcp-config)#dns-server 172.168.20.2
+
+Router(dhcp-config)#ip dhcp pool ventas30
+Router(dhcp-config)#network 172.168.30.0 255.255.255.0
+Router(dhcp-config)#default-router 172.168.30.1
+Router(dhcp-config)#dns-server 172.168.30.2
+Router(dhcp-config)#
