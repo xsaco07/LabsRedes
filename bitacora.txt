@@ -5,3 +5,179 @@
 
 ==== Colocar hardware | Emmanuel
 
+==== Configurar IP y Gateway a WEB1.com | Emmanuel
+IP      = 193.168.10.2
+GATEWAY = 193.168.10.1
+
+==== Configurar EIGRP 100 en R2  | Emmanuel
+ena
+conf t 
+
+! configurar fast ethernet
+int fa0/0
+ip address 193.168.10.1 255.255.255.0
+no sh
+
+! configurar serial
+int s0/0/0
+ip address 210.20.10.6 255.255.255.252
+no sh
+
+! configurar eigrp
+router eigrp 100
+no auto-summary
+network 193.168.10.0 0.0.0.255
+network 210.20.10.4 0.0.0.3
+
+==== Configurar EIGRP 100 en R1 | Emmanuel
+ena 
+conf t 
+
+! configurar serial
+int s0/0/1
+ip address 210.20.10.5 255.255.255.252
+no sh
+
+! configurar eigrp
+router eigrp 100
+no auto-summary
+network 210.20.10.4 0.0.0.3
+
+
+==== Configurar IP y Gateway a WEB2.com | Emmanuel
+IP      = 194.168.10.2
+GATEWAY = 194.168.10.1
+
+==== Configurar EIGRP 200 en R4 | Emmanuel
+ena
+conf t 
+
+! configurar fast ethernet
+int fa0/0
+ip address 194.168.10.1 255.255.255.0
+no sh
+
+! configurar serial
+int s0/0/0
+ip address 220.20.10.6 255.255.255.252
+no sh
+
+! configurar eigrp
+router eigrp 200
+no auto-summary
+network 194.168.10.0 0.0.0.255
+network 220.20.10.4 0.0.0.3
+
+
+==== Configurar IP y GATEWAY en DNS | Emmanuel
+IP      = 198.162.10.2
+GATEWAY = 198.162.10.1
+
+==== Configurar fast ethernet en R3  | Emmanuel
+ena 
+conf t 
+int fa0/0
+ip address 198.162.10.1 255.255.255.0
+no sh 
+
+
+==== Configurar EIGRP 200 en R3 | Emmanuel
+
+
+! configurar serial
+int s0/0/1
+ip address 220.20.10.5 255.255.255.252
+no sh
+
+! configurar eigrp
+router eigrp 200
+no auto-summary
+network 220.20.10.4 0.0.0.3
+network 198.162.10.0 0.0.0.255
+
+
+
+==== Configurar FrameRelay en R_STICK | Emmanuel
+ena
+conf t
+
+! configurar frame relay en toda la interfaz
+int s0/0/0
+encapsulation frame-relay
+no sh
+
+! configurar el DLCI 100 
+int s0/0/0.100 point-to-point
+frame-relay interface-dlci 100
+ip address 200.10.20.5 255.255.255.252
+
+! configurar el DLCI 200 
+int s0/0/0.200 point-to-point
+frame-relay interface-dlci 200
+ip address 200.10.20.9 255.255.255.252
+
+==== Configurar FrameRelay en R1 | Emmanuel
+
+! configurar frame relay en toda la interfaz
+int s0/0/0
+encapsulation frame-relay
+no sh
+
+! configurar el DLCI 100 
+int s0/0/0.100 point-to-point
+frame-relay interface-dlci 100
+ip address 200.10.20.6 255.255.255.252
+
+
+
+==== Configurar FrameRelay en R3 | Emmanuel
+! configurar frame relay en toda la interfaz
+int s0/0/0
+encapsulation frame-relay
+no sh
+
+! configurar el DLCI 200 
+int s0/0/0.200 point-to-point
+frame-relay interface-dlci 200
+ip address 200.10.20.10 255.255.255.252
+
+
+==== Configurar mapeo de DCLIs en la nube | Emmanuel
+
+
+==== Configurar OSPF 10 R_STICK | Emmanuel
+router ospf 10 
+network 200.10.20.4 0.0.0.3 area 0
+network 200.10.20.8 0.0.0.3 area 0
+
+
+==== Configurar OSPF en R1
+router ospf 10
+network 200.10.20.4 0.0.0.3 area 0
+network 210.20.10.4 0.0.0.3 area 0
+
+==== Redistribuir rutas en R1 | Emmanuel
+
+! pasar rutas de OSPF 10 a EIGRP 100
+router eigrp 100
+redistribute ospf 10 metric 1544 200 255 1 1500
+
+! pasar rutas de EIGRP 100 a OSPF 10
+router ospf 10
+redistribute eigrp 100 metric 64 subnets
+
+
+==== Configurar OSPF en R3 | Emmanuel
+router ospf 10
+network 200.10.20.8 0.0.0.3 area 0
+network 220.20.10.4 0.0.0.3 area 0
+
+==== Redistribuir rutas en R3 | Emmanuel
+
+! pasar rutas de OSPF 10 a EIGRP 200
+router eigrp 200
+redistribute ospf 10 metric 1544 200 255 1 1500
+
+! pasar rutas de EIGRP 200 a OSPF 10
+router ospf 10
+redistribute eigrp 200 metric 64 subnets
