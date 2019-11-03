@@ -181,3 +181,120 @@ redistribute ospf 10 metric 1544 200 255 1 1500
 ! pasar rutas de EIGRP 200 a OSPF 10
 router ospf 10
 redistribute eigrp 200 metric 64 subnets
+
+
+
+
+==== SW 1 | gerardo
+Switch(config)#interface range fastEthernet 0/1-5
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/6-10
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/11-15
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/20-24
+Switch(config-if-range)#switchport trunk allowed vlan 10,20,30
+Switch(config-if-range)#switchport mode trunk
+
+
+==== SW 2 | gerardo
+Switch(config)#interface range fastEthernet 0/1-5
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/6-10
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/11-15
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/20-24
+Switch(config-if-range)#switchport trunk allowed vlan 10,20,30
+Switch(config-if-range)#switchport mode trunk
+
+
+
+==== SW 3 | gerardo
+Switch(config)#interface range fastEthernet 0/1-5
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/6-10
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/11-15
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/19-24
+Switch(config-if-range)#switchport trunk allowed vlan 10,20,30
+Switch(config-if-range)#switchport mode trunk
+
+==== SW 4 | gerardo
+Switch(config)#interface range fastEthernet 0/1-5
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/6-10
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/11-15
+Switch(config-if-range)#switchport access vlan 30
+Switch(config-if-range)#switchport mode access
+
+Switch(config-if-range)#interface range fastEthernet 0/20-24
+Switch(config-if-range)#switchport trunk allowed vlan 10,20,30
+Switch(config-if-range)#switchport mode trunk
+
+
+
+==== R_STICK | gerardo
+Router(config)#interface fastEthernet 0/0
+Router(config-if)#no sh
+Router(config-if)#interface fastEthernet 0/0.10
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip address 172.168.10.1 255.255.255.0
+
+Router(config-subif)#interface fastEthernet 0/0.20
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip address 172.168.20.1 255.255.255.0
+
+Router(config-subif)#interface fastEthernet 0/0.30
+Router(config-subif)#encapsulation dot1Q 30
+Router(config-subif)#ip address 172.168.30.1 255.255.255.0
+
+Router(config)#ip dhcp excluded-address 172.168.10.1
+Router(config)#ip dhcp excluded-address 172.168.20.1
+Router(config)#ip dhcp excluded-address 172.168.30.1
+
+Router(config)#ip dhcp pool vlan10
+Router(dhcp-config)#network 172.168.10.0 255.255.255.0
+Router(dhcp-config)#default-router 172.168.10.1
+Router(dhcp-config)#dns-server 198.162.10.2
+
+Router(dhcp-config)#ip dhcp pool vlan20
+Router(dhcp-config)#network 172.168.20.0 255.255.255.0
+Router(dhcp-config)#default-router 172.168.20.1
+Router(dhcp-config)#dns-server 198.162.10.2
+
+Router(dhcp-config)#ip dhcp pool vlan30
+Router(dhcp-config)#network 172.168.30.0 255.255.255.0
+Router(dhcp-config)#default-router 172.168.30.1
+Router(dhcp-config)#dns-server 198.162.10.2
+Router(dhcp-config)#ex
+
+Router(config)#router ospf 10
+Router(config-router)#network 172.168.10.0 0.0.0.255 area 0
+Router(config-router)#network 172.168.20.0 0.0.0.255 area 0
+Router(config-router)#network 172.168.30.0 0.0.0.255 area 0
+Se activa servicio DNS
