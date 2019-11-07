@@ -298,3 +298,40 @@ Router(config-router)#network 172.168.10.0 0.0.0.255 area 0
 Router(config-router)#network 172.168.20.0 0.0.0.255 area 0
 Router(config-router)#network 172.168.30.0 0.0.0.255 area 0
 Se activa servicio DNS
+
+===== SW1
+ena
+conf t
+interface range f0/22-24
+channel-group 1 mode desirable
+
+interface range f0/20-21
+channel-group 2 mode desirable
+
+===== SW2
+ena
+conf t
+interface range f0/22-24
+channel-group 1 mode auto
+
+interface range f0/20-21
+channel-group 2 mode desirable
+
+===== SW3
+ena
+conf t
+interface range f0/22-24
+channel-group 1 mode auto
+
+interface range f0/20-21
+channel-group 2 mode desirable
+
+===== SW4
+ena
+conf t
+interface range f0/22-24
+channel-group 1 mode auto
+
+interface range f0/20-21
+channel-group 2 mode auto
+
